@@ -1,0 +1,354 @@
+{
+  "sops": [
+    {
+      "id": "SOP-001",
+      "category": "outdoor_exercise",
+      "severity": "high",
+      "priority": 80,
+      "description": "Guidance for cycling, biking, or riding a two-wheeler when strong winds create a safety risk.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "cycling",
+              "biking",
+              "two_wheeler"
+            ]
+          },
+          {
+            "field": "wind_speed",
+            "operator": ">=",
+            "value": 40
+          }
+        ],
+        "any": []
+      },
+      "advice": "Avoid cycling or riding a two-wheeler because strong winds create a safety risk."
+    },
+    {
+      "id": "SOP-002",
+      "category": "outdoor_exercise",
+      "severity": "medium",
+      "priority": 60,
+      "description": "Guidance for outdoor exercise when ultraviolet radiation is very high during the middle of the day.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "cycling",
+              "running",
+              "walking",
+              "outdoor_exercise"
+            ]
+          },
+          {
+            "field": "uv_index",
+            "operator": ">=",
+            "value": 8
+          },
+          {
+            "field": "hour",
+            "operator": "between",
+            "value": [
+              11,
+              16
+            ]
+          }
+        ],
+        "any": []
+      },
+      "advice": "Avoid unprotected outdoor exercise during this period. Use appropriate sun protection or consider moving the activity to a lower-UV time."
+    },
+    {
+      "id": "SOP-003",
+      "category": "travel",
+      "severity": "medium",
+      "priority": 50,
+      "description": "Guidance for travel or commuting when precipitation is highly likely and may disrupt outdoor travel.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "travel",
+              "commute",
+              "driving"
+            ]
+          },
+          {
+            "field": "precipitation_probability",
+            "operator": ">=",
+            "value": 70
+          }
+        ],
+        "any": []
+      },
+      "advice": "Travel may be affected because precipitation is highly likely. Allow extra time and check relevant local travel or weather alerts before departure."
+    },
+    {
+      "id": "SOP-004",
+      "category": "outdoor_exercise",
+      "severity": "high",
+      "priority": 70,
+      "description": "Guidance for cycling, running, walking, or other outdoor exercise when heavy precipitation is highly likely.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "cycling",
+              "biking",
+              "running",
+              "walking",
+              "outdoor_exercise"
+            ]
+          },
+          {
+            "field": "precipitation_probability",
+            "operator": ">=",
+            "value": 80
+          }
+        ],
+        "any": []
+      },
+      "advice": "Consider avoiding the outdoor activity because heavy precipitation is highly likely and conditions may become unsuitable."
+    },
+    {
+      "id": "SOP-005",
+      "category": "children",
+      "severity": "high",
+      "priority": 90,
+      "description": "Guidance for outdoor activities involving children when temperatures are extremely hot.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "park",
+              "outdoor_play",
+              "outdoor_activity",
+              "walking"
+            ]
+          },
+          {
+            "field": "vulnerable_group",
+            "operator": "in",
+            "value": [
+              "child",
+              "children"
+            ]
+          },
+          {
+            "field": "temperature",
+            "operator": ">=",
+            "value": 38
+          }
+        ],
+        "any": []
+      },
+      "advice": "Avoid prolonged outdoor activity for children in these conditions and consider moving the activity to a cooler time or indoors."
+    },
+    {
+      "id": "SOP-006",
+      "category": "elderly",
+      "severity": "high",
+      "priority": 90,
+      "description": "Guidance for outdoor activities involving elderly people when high temperatures increase heat-related risk.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "vulnerable_group",
+            "operator": "in",
+            "value": [
+              "elderly",
+              "older_adult",
+              "senior"
+            ]
+          },
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "walking",
+              "park",
+              "outdoor_activity"
+            ]
+          },
+          {
+            "field": "temperature",
+            "operator": ">=",
+            "value": 36
+          }
+        ],
+        "any": []
+      },
+      "advice": "Limit prolonged outdoor activity and consider a cooler time of day because the temperature presents an increased heat-related risk."
+    },
+    {
+      "id": "SOP-007",
+      "category": "pets",
+      "severity": "medium",
+      "priority": 50,
+      "description": "Guidance for taking pets such as dogs outside for walks when hot weather may cause discomfort or heat stress.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "vulnerable_group",
+            "operator": "in",
+            "value": [
+              "pet",
+              "dog"
+            ]
+          },
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "walking",
+              "walk",
+              "outdoor_activity"
+            ]
+          },
+          {
+            "field": "temperature",
+            "operator": ">=",
+            "value": 32
+          }
+        ],
+        "any": []
+      },
+      "advice": "Avoid prolonged walks during the hottest part of the day and consider a cooler time for taking the pet outside."
+    },
+    {
+      "id": "SOP-008",
+      "category": "leisure",
+      "severity": "low",
+      "priority": 40,
+      "description": "Guidance for deciding whether overall weather conditions are suitable for a casual outdoor picnic or relaxed outdoor gathering.",
+      "condition_type": "fuzzy",
+      "required_conditions": [
+        {
+          "field": "activity",
+          "operator": "in",
+          "value": [
+            "picnic",
+            "outdoor_gathering",
+            "leisure"
+          ]
+        }
+      ],
+      "criteria": [
+        {
+          "field": "temperature",
+          "operator": "between",
+          "value": [
+            15,
+            32
+          ],
+          "weight": 1
+        },
+        {
+          "field": "precipitation_probability",
+          "operator": "<",
+          "value": 40,
+          "weight": 1
+        },
+        {
+          "field": "wind_speed",
+          "operator": "<",
+          "value": 30,
+          "weight": 1
+        }
+      ],
+      "score_threshold": 2,
+      "advice": "The overall weather conditions are generally suitable for a picnic. Consider the current temperature, wind, and chance of precipitation when making the final decision."
+    },
+    {
+      "id": "SOP-009",
+      "category": "outdoor_exercise",
+      "severity": "low",
+      "priority": 30,
+      "description": "Guidance for walking or light outdoor exercise when temperatures are cool but not extreme.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "walking",
+              "light_exercise",
+              "outdoor_exercise"
+            ]
+          },
+          {
+            "field": "temperature",
+            "operator": "<",
+            "value": 10
+          }
+        ],
+        "any": []
+      },
+      "advice": "Outdoor activity is possible, but dress appropriately for the cool conditions and consider keeping the activity moderate."
+    },
+    {
+      "id": "SOP-010",
+      "category": "general_outdoor",
+      "severity": "critical",
+      "priority": 100,
+      "description": "Guidance for outdoor activities during exceptionally severe weather conditions where outdoor activity should be avoided.",
+      "condition_type": "boolean",
+      "conditions": {
+        "all": [
+          {
+            "field": "activity",
+            "operator": "in",
+            "value": [
+              "cycling",
+              "biking",
+              "running",
+              "walking",
+              "picnic",
+              "park",
+              "outdoor_activity",
+              "outdoor_exercise",
+              "travel"
+            ]
+          }
+        ],
+        "any": [
+          {
+            "field": "wind_speed",
+            "operator": ">=",
+            "value": 55
+          },
+          {
+            "field": "precipitation",
+            "operator": ">=",
+            "value": 20
+          },
+          {
+            "field": "precipitation_probability",
+            "operator": ">=",
+            "value": 90
+          }
+        ]
+      },
+      "advice": "Avoid the outdoor activity because current weather conditions are exceptionally severe. Follow official local weather or emergency guidance."
+    }
+  ]
+}
