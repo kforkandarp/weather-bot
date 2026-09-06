@@ -5,7 +5,4 @@ langchain-community
 pydantic
 python-dotenv
 requests
-faiss-cpu
-sentence-transformers
 streamlit
-torchvision

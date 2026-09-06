@@ -1,8 +1,18 @@
 .venv/
+venv/
+env/
+
+
 __pycache__/
-*.pyc
+*.py[cod]
 
 .env
 
-artifacts/
-.streamlit/
+
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+.streamlit/secrets.toml
+.streamlit/config.toml
