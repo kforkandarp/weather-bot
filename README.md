@@ -1,8 +1,8 @@
 # MediBuddy Weather-Advisory Bot
 
-> 🌐 **Live Application:** [Launch MediBuddy Weather Advisory Bot](https://medibuddy-weather-bot.streamlit.app)
+> 🌐 **Live Application:** [Launch MediBuddy Weather Advisory Bot](https://weather-bot-medibuddy.streamlit.app/)
 
-A production-grade weather advisory system built with **LangGraph**, **Groq (Llama 3.3 70B)**, and **Streamlit**. The bot ingests real-time meteorological data from Open-Meteo and deterministically evaluates standard safety procedures (SOPs) to produce grounded, policy-compliant recommendations for outdoor activities[cite: 1, 4].
+A production-oriented weather advisory system built with **LangGraph**, **Groq (Llama 3.3 70B)**, and **Streamlit**. The bot ingests real-time meteorological data from Open-Meteo and deterministically evaluates standard safety procedures (SOPs) to produce grounded, policy-compliant recommendations for outdoor activities[cite: 1, 4].
 
 ---
 
@@ -57,8 +57,8 @@ The application is structured as a stateful cyclic directed graph using LangGrap
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/medibuddy-weather-bot.git
-cd medibuddy-weather-bot
+git clone https://github.com/your-username/weather-bot.git
+cd weather-bot
 ```
 
 ### 2. Create Virtual Environment
