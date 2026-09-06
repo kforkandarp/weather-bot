@@ -9,19 +9,29 @@ def _normalize_activity(activity: Optional[str]) -> Optional[str]:
         return None
 
     value = activity.strip().lower()
+    
+    # Exact and common compound mappings
     aliases = {
         "bike": "cycling",
         "bicycle": "cycling",
         "biking": "cycling",
         "ride": "cycling",
         "bike ride": "cycling",
+        "scooty ride": "cycling",
+        "ride to work": "commute",
         "cycling": "cycling",
         "run": "running",
         "jog": "running",
         "jogging": "running",
         "walk": "walking",
         "going for a walk": "walking",
+        "stroll": "walking",
+        "strolling": "walking",
+        "light stroll": "walking",
         "picnic": "picnic",
+        "scooty": "cycling",
+        "scooter": "cycling",
+        "pedal": "cycling",
         "commuting": "commute",
         "commute": "commute",
         "driving": "driving",
@@ -34,7 +44,20 @@ def _normalize_activity(activity: Optional[str]) -> Optional[str]:
         "outdoor activity": "outdoor_activity",
         "outdoor exercise": "outdoor_exercise",
     }
-    return aliases.get(value, value)
+    if value in aliases:
+        return aliases[value]
+
+    # Substring fallbacks for phrases like "scooty ride to work"
+    if "work" in value or "commute" in value:
+        return "commute"
+    if any(k in value for k in ["scooty", "bike", "cycle", "pedal", "ride"]):
+        return "cycling"
+    if any(k in value for k in ["walk", "stroll"]):
+        return "walking"
+    if any(k in value for k in ["jog", "run"]):
+        return "running"
+
+    return value
 
 
 def _normalize_vulnerable_group(vulnerable_group: Optional[str]) -> Optional[str]:

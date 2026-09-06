@@ -263,12 +263,11 @@ def evaluate_sops(
     weather: WeatherState,
 ) -> list[SOP]:
     """
-    Return every SOP whose conditions actually pass.
+        Return every SOP whose conditions actually pass.
 
-    Semantic retrieval determines candidates.
-
-    This function determines actual applicability.
-    """
+        All configured SOPs are evaluated deterministically.
+        This function determines actual applicability.
+        """ 
 
     applicable = []
 
