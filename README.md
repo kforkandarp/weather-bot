@@ -1,29 +1,64 @@
-# MediBuddy Weather-Advisory Bot
+# 🌦️ MediBuddy Weather-Advisory Bot
+
+> **A policy-grounded weather decision system built with LangGraph.**
+
+Real-time weather → deterministic SOP evaluation → grounded recommendation.
 
 > 🌐 **Live Application:** [Launch MediBuddy Weather Advisory Bot](https://weather-bot-medibuddy.streamlit.app/)
 
-A production-oriented weather advisory system built with **LangGraph**, **Groq (Llama 3.3 70B)**, and **Streamlit**. The bot ingests real-time meteorological data from Open-Meteo and deterministically evaluates standard safety procedures (SOPs) to produce grounded, policy-compliant recommendations for outdoor activities[cite: 1, 4].
+### 🛠️ Tech Stack
+
+**LangGraph** · **Groq / openai/gpt-oss-120b** · **Open-Meteo** · **Pydantic** · **Streamlit** · **Python**
 
 ---
 
-## Overview & Architecture
+## 🧠 Architecture
 
-The application is structured as a stateful cyclic directed graph using LangGraph. It strictly separates **intent extraction** (handled via LLM function calling) and **final explanation synthesis** from the **safety policy resolution**, which runs entirely through an auditable, deterministic rule evaluator[cite: 1, 4].
+The system is intentionally split into two layers:
+
+- 🤖 **LLM layer** — intent extraction and response wording
+- 🛡️ **Deterministic layer** — weather facts, SOP evaluation, conflict resolution
+
+> **The LLM never decides whether an activity is safe.**
+> It only extracts intent and verbalizes a decision already made by deterministic policy logic.
 
 ![System Architecture](graph_diagram.png)
 
+### 🖥️ Application
+
+![Application Interface](streamlit_app.png)
+
 ### Execution Pipeline
 
-1. **Intent Extraction (`extract_intent`):** Parses the user query into structured attributes (`activity`, `location`, `time_expression`, `vulnerable_group`) using Pydantic schema constraints.
-2. **Location Validation & Geocoding (`check_location`, `resolve_location`):** Resolves city names to coordinates via Open-Meteo Geocoding. If a location is absent or unresolvable, the graph terminates into a clear clarification prompt.
-3. **Weather Retrieval (`fetch_weather`):** Queries live and forecasted weather (temperature, wind speed, precipitation, rain probability, UV index) from the Open-Meteo Forecast API. If the upstream API fails, it routes to an honest failure response rather than hallucinating.
-4. **Policy Evaluation (`retrieve_sops`, `evaluate_sops`):** Reads definitions freshly from `sops.json` and evaluates boolean and numeric boundary rules against current weather parameters.
-5. **Conflict Resolution (`resolve_sop`):** If multiple SOPs match the current conditions, tie-breaking selects the winning policy using strict deterministic precedence:
+1. 🤖 **Intent Extraction (`extract_intent`):** Parses the user query into structured attributes (`activity`, `location`, `time_expression`, `vulnerable_group`) using Pydantic schema constraints.
+
+2. 📍 **Location Validation & Geocoding (`check_location`, `resolve_location`):** Resolves city names to coordinates via Open-Meteo Geocoding. If a location is absent or unresolvable, the graph terminates into a clear clarification prompt.
+
+3. 🌦️ **Weather Retrieval (`fetch_weather`):** Queries live and forecasted weather (temperature, wind speed, precipitation, rain probability, UV index) from the Open-Meteo Forecast API. If the upstream API fails, it routes to an honest failure response rather than hallucinating.
+
+4. 🛡️ **Policy Evaluation (`retrieve_sops`, `evaluate_sops`):** Reads definitions freshly from `sops.json` and evaluates boolean and numeric boundary rules against current weather parameters.
+
+5. ⚖️ **Conflict Resolution (`resolve_sop`):** If multiple SOPs match the current conditions, tie-breaking selects the winning policy using strict deterministic precedence:
 
    $$\text{Severity (critical } > \text{ high } > \text{ medium } > \text{ low)} \longrightarrow \text{Priority (descending)} \longrightarrow \text{SOP ID (ascending)}$$
 
    If no policy applies, it returns a standard out-of-scope response without inventing rules.
-6. **Constrained Synthesis (`final_response`):** Synthesizes a conversational response citing the exact SOP ID and quoting the real retrieved metrics without altering advice or hallucinating values.
+
+6. 💬 **Constrained Synthesis (`final_response`):** Synthesizes a conversational response citing the exact SOP ID and quoting the real retrieved metrics without altering advice or hallucinating values.
+
+---
+
+## 🎯 Design Principles
+
+| Principle | Implementation |
+|---|---|
+| LLMs for language | Intent extraction and final response synthesis |
+| Deterministic policy | SOP applicability is evaluated with explicit rules |
+| Live facts | Weather values always come from Open-Meteo |
+| Explicit precedence | Severity → priority → SOP ID |
+| Independently managed SOPs | Policies live in `sops.json` |
+| No guessing | Missing location, API failures, and no-SOP cases have explicit paths |
+| Session memory | LangGraph checkpointing maintains conversation context |
 
 ---
 
@@ -57,7 +92,7 @@ The application is structured as a stateful cyclic directed graph using LangGrap
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/weather-bot.git
+git clone https://github.com/kforkandarp/weather-bot.git
 cd weather-bot
 ```
 
@@ -93,12 +128,18 @@ GROQ_API_KEY=your_groq_api_key_here
 
 The test suite in `evals/eval.py` verifies both end-to-end conversational paths and isolated deterministic logic across 10 functional criteria:
 
-- **Direct Policy Match (Favorable & Adverse):** Verifies correct SOP assignment under safe conditions (live API) and simulated dangerous conditions (deterministic unit test).
-- **Paraphrased Intent:** Tests semantic canonicalization of informal queries (e.g., "light stroll", "scooty ride to work") to standard activities without requiring exact keyword matches.
-- **Live API Grounding:** Confirms temperature, wind speed, and precipitation values quoted in the text directly match live Open-Meteo telemetry[cite: 1].
-- **Out of Scope Handling:** Validates that unsupported activities return a clean refusal rather than fabricating safety advice[cite: 1].
-- **Failure Resilience:** Simulates upstream API connectivity failures to verify graceful recovery without crashing[cite: 1].
+- **Direct Policy Match (Favorable & Adverse):** Verifies correct SOP assignment under safe conditions (live API) and simulated dangerous conditions (deterministic evaluation).
+
+- **Paraphrased Intent:** Checks if the bot understands everyday slang and phrasing (like "light stroll" or "scooty ride") and correctly matches them to standard activities like "walking" or "commuting," even without the exact words.
+
+- **Live API Grounding:** Confirms temperature, wind speed, and precipitation values quoted in the text directly match live Open-Meteo telemetry.
+
+- **Out of Scope Handling:** Validates that unsupported activities return a clean refusal rather than fabricating safety advice.
+
+- **Failure Resilience:** Simulates upstream API connectivity failures to verify graceful recovery without crashing.
+
 - **Conflict Resolution:** Evaluates edge cases where multiple SOPs match simultaneously, verifying that critical severity and higher priority take precedence.
+
 - **Adversarial Resilience:** Tests prompt injection attempts designed to bypass SOPs or declare dangerous conditions safe.
 
 ### Running Evaluations
