@@ -2,9 +2,9 @@
 
 > **A policy-grounded weather decision system built with LangGraph.**
 
-Real-time weather → deterministic SOP (Standard Operating Procedure) evaluation → grounded recommendation.
+Real-time weather → deterministic SOP (Standard Operating Procedure) evaluation → grounded recommendation
 
-> 🌐 **Live Application:** [Launch MediBuddy Weather Advisory Bot](https://weather-bot-medibuddy.streamlit.app/)
+> 🌐 **Live Application:** [Launch the bot](https://weather-bot-medibuddy.streamlit.app/)
 
 ### 🛠️ Tech Stack
 
